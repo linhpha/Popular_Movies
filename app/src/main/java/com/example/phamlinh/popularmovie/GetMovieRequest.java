@@ -17,6 +17,7 @@ import java.net.URL;
 
 public class GetMovieRequest extends AsyncTask<Void, Void, Movie[]> {
 
+    private OnTaskCompleted listener;
     public static final String REQUEST_METHOD = "GET";
     public static final String RESULTS = "results";
     public static final int READ_TIMEOUT = 15000;
@@ -29,8 +30,9 @@ public class GetMovieRequest extends AsyncTask<Void, Void, Movie[]> {
     public static final String RELEASE_DATE = "release_date";
     public String api_key;
 
-    public GetMovieRequest(String api_key) {
+    public GetMovieRequest(String api_key, OnTaskCompleted listener) {
         this.api_key = api_key;
+        this.listener = listener;
     }
 
 
@@ -84,15 +86,18 @@ public class GetMovieRequest extends AsyncTask<Void, Void, Movie[]> {
             return null;
         }
 
-        for (int i = 0; i < movies.length; i++) {
+        for (int i = 0; i < resultsArray.length(); i++) {
             try {
                 JSONObject movie = resultsArray.getJSONObject(i);
+
                 Movie currentMovie = new Movie();
                 currentMovie.setTitle(movie.getString(ORIGINAL_TITLE));
                 currentMovie.setImageUrl(movie.getString(POSTER_PATH));
+                Log.e("Title", movie.getString(RELEASE_DATE));
                 currentMovie.setDescription(movie.getString(OVERVIEW));
                 currentMovie.setVoteAverage(movie.getDouble(VOTE_AVERAGE));
                 currentMovie.setReleaseDate(movie.getString(RELEASE_DATE));
+                movies[i] = currentMovie;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -118,7 +123,6 @@ public class GetMovieRequest extends AsyncTask<Void, Void, Movie[]> {
     protected void onPostExecute(Movie[] movies) {
         super.onPostExecute(movies);
         Log.e("Test", movies.toString());
-
-
+        listener.onTaskCompleted(movies);
     }
 }

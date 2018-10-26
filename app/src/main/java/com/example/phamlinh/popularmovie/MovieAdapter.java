@@ -1,6 +1,7 @@
 package com.example.phamlinh.popularmovie;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -39,6 +40,9 @@ public class MovieAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView = new ImageView(context);
+        for (int i = 0; i < movies.length; i++) {
+            Log.e("Testing movie", movies[i].toString());
+        }
         Picasso.with(context).load(movies[position].getImageUrl()).error(R.drawable.not_found).into(imageView);
         return imageView;
     }
