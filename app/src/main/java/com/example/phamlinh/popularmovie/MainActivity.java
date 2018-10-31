@@ -1,5 +1,6 @@
 package com.example.phamlinh.popularmovie;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         gridView = findViewById(R.id.movieGridView);
-        gridView.setOnItemClickListener();
+        gridView.setOnItemClickListener(movieDetailsListener);
 //        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -56,7 +57,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Movie movie = (Movie) parent.getItemAtPosition(position);
+            Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+            intent.putExtra(getString(R.string.grid_movie_detail), movie);
+            startActivity(intent);
+
+            Log.e("movie", movie.getTitle());
 
         }
-    }
+    };
 }
